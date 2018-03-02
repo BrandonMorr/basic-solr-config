@@ -188,10 +188,21 @@
   </xsl:template>  
    
   <xsl:template match="mods:originInfo[mods:dateCreated[@encoding='iso8601']]" mode="CollectingLA">
-    <xsl:variable name="dateStart"
-      select="java:edu.ucla.library.IsoToSolrDateConverter.getStartDateFromIsoDateString(normalize-space(mods:dateCreated[@encoding='iso8601']))" />
-    <xsl:variable name="dateEnd"
-      select="java:edu.ucla.library.IsoToSolrDateConverter.getEndDateFromIsoDateString(normalize-space(mods:dateCreated[@encoding='iso8601']))" />
+    <xsl:variable name="rawText" select="normalize-space(mods:dateCreated[@encoding='iso8601'])"/>
+    <xsl:variable name="dateStart">
+      <xsl:call-template name="get_ISO8601_date">
+        <xsl:with-param name="date" select="$rawText"/>
+        <xsl:with-param name="pid"/>
+        <xsl:with-param name="datastream"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="dateEnd">
+      <xsl:call-template name="get_ISO8601_date">
+        <xsl:with-param name="date" select="$rawText"/>
+        <xsl:with-param name="pid"/>
+        <xsl:with-param name="datastream"/>
+      </xsl:call-template>
+    </xsl:variable>
     <field name="mods_dateCreated_dt">
       <xsl:value-of select="$dateStart"/>
     </field>
